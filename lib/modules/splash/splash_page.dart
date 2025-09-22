@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -6,10 +8,19 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Splash'),
+      body: Center(
+        child: Container(
+          width: Get.width,
+          height: Get.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Image.asset('assets/images/logo.png'),
+        ),
       ),
-      body: Container(),
     );
   }
 }

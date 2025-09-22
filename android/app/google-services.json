@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "892804494140",
+    "project_id": "dart-week-app-filmes-get-9e2ca",
+    "storage_bucket": "dart-week-app-filmes-get-9e2ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892804494140:android:7069b2839c4402ff54a439",
+        "android_client_info": {
+          "package_name": "enzo.crmsolucoes.app_filmes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892804494140-fa41gco8tbmspbddppi4hobucsct20qi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "enzo.crmsolucoes.app_filmes",
+            "certificate_hash": "d4c14bce35abfac3f2c9d1549bf4fa7f7eff3e3b"
+          }
+        },
+        {
+          "client_id": "892804494140-t76imjnjp1dhbqra810pbu7ovh7hnlpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwyMN5YCptiZTP8x2z5JnTxomNcL0Of-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892804494140-t76imjnjp1dhbqra810pbu7ovh7hnlpt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
