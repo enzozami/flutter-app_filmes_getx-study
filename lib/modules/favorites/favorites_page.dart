@@ -8,6 +8,12 @@ class FavoritesPage extends GetView<FavoritesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: Text('Favoritos'),
+        ),
+      ),
       body: Text('Estou na FavoritesPage'),
     );
   }

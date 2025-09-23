@@ -12,9 +12,6 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-      ),
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
           selectedItemColor: context.themeRed,
@@ -30,7 +27,7 @@ class HomePage extends GetView<HomeController> {
       }),
       body: Navigator(
         initialRoute: '/movies',
-        key: Get.nestedKey(1),
+        key: Get.nestedKey(HomeController.navigatorKey),
         onGenerateRoute: (settings) {
           if (settings.name == '/movies') {
             return GetPageRoute(

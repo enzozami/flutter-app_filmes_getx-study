@@ -4,6 +4,6 @@ import './home_controller.dart';
 class HomeBindings implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => HomeController(), fenix: true);
+    Get.lazyPut(() => HomeController(loginServide: Get.find()), fenix: true);
   }
 }
