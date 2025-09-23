@@ -1,3 +1,4 @@
+import 'package:app_filmes/application/bindings/application_bindings.dart';
 import 'package:app_filmes/firebase_options.dart';
 import 'package:app_filmes/modules/login/login_module.dart';
 import 'package:app_filmes/modules/splash/splash_module.dart';
@@ -23,8 +24,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
+      initialBinding: ApplicationBindings(),
       getPages: [
         ...SplashModule().routers,
         ...LoginModule().routers,
