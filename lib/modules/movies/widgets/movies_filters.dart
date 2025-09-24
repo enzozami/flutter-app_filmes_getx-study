@@ -12,17 +12,19 @@ class MoviesFilters extends GetView<MoviesController> {
       padding: const EdgeInsets.only(top: 20.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Obx(() {
-          return Row(
-            children: controller.genres
-                .map((g) => FilterTag(
-                      model: g,
-                      onPressed: () {},
-                      selected: false,
-                    ))
-                .toList(),
-          );
-        }),
+        child: Obx(
+          () {
+            return Row(
+              children: controller.genres
+                  .map((g) => FilterTag(
+                        model: g,
+                        onPressed: () {},
+                        selected: false,
+                      ))
+                  .toList(),
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,9 +1,12 @@
 import 'package:app_filmes/application/ui/widgets/movie_card.dart';
+import 'package:app_filmes/models/movie_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 class MoviesGroup extends StatelessWidget {
   final String title;
-  const MoviesGroup({super.key, required this.title});
+  final List<MovieModel> movies;
+  const MoviesGroup({super.key, required this.title, required this.movies});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +27,18 @@ class MoviesGroup extends StatelessWidget {
           ),
           SizedBox(
             height: 280,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return MovieCard();
-              },
-            ),
+            child: Obx(() {
+              return ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: movies.length,
+                itemBuilder: (context, index) {
+                  return MovieCard(
+                    movie: movies[index],
+                  );
+                },
+              );
+            }),
           )
         ],
       ),

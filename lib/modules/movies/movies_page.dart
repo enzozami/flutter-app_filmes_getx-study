@@ -17,8 +17,14 @@ class MoviesPage extends GetView<MoviesController> {
           children: [
             MoviesHeader(),
             MoviesFilters(),
-            MoviesGroup(title: 'Mais populares'),
-            MoviesGroup(title: 'Top filmes'),
+            MoviesGroup(
+              title: 'Mais populares',
+              movies: controller.popularMovies,
+            ),
+            MoviesGroup(
+              title: 'Top filmes',
+              movies: controller.topRatedMovies,
+            ),
           ],
         ),
       ),
