@@ -19,6 +19,8 @@ class MoviesController extends GetxController with MessagesMixin {
   final _popularMoviesOriginal = <MovieModel>[];
   final _topRatedMoviesOriginal = <MovieModel>[];
 
+  final genreSelected = Rxn<GenreModel>();
+
   MoviesController({required GenresService genresService, required MoviesService moviesService})
       : _genresService = genresService,
         _moviesService = moviesService;
@@ -40,9 +42,10 @@ class MoviesController extends GetxController with MessagesMixin {
       final topRatedMoviesData = await _moviesService.getTopRated();
 
       popularMovies.assignAll(popularMoviesData);
-      _popularMoviesOriginal.assignAll(popularMoviesData);
+      _popularMoviesOriginal.addAll(popularMoviesData);
+
       topRatedMovies.assignAll(topRatedMoviesData);
-      _topRatedMoviesOriginal.assignAll(topRatedMoviesData);
+      _topRatedMoviesOriginal.addAll(topRatedMoviesData);
     } catch (e, s) {
       log(e.toString());
       log(s.toString());
@@ -69,5 +72,35 @@ class MoviesController extends GetxController with MessagesMixin {
       popularMovies.assignAll(_popularMoviesOriginal);
       topRatedMovies.assignAll(_topRatedMoviesOriginal);
     }
+  }
+
+  void filterMoviesByGenre(GenreModel? genreModel) {
+    var filter = genreModel;
+    if (filter?.id == genreSelected.value?.id) {
+      genreSelected.value = null;
+    } else {
+      genreSelected.value = filter;
+    }
+
+    if (genreSelected.value == null) {
+      popularMovies.assignAll(_popularMoviesOriginal);
+      topRatedMovies.assignAll(_topRatedMoviesOriginal);
+      return;
+    }
+
+    var genreId = genreSelected.value!.id;
+
+    log('Filtrando por genreId: $genreId');
+    for (var movie in _popularMoviesOriginal) {
+      log('Movie: ${movie.title}, genres: ${movie.genres}');
+    }
+
+    var newPopularMovies =
+        _popularMoviesOriginal.where((movie) => movie.genres.contains(genreId)).toList();
+    var newTopRatedMovies =
+        _topRatedMoviesOriginal.where((movie) => movie.genres.contains(genreId)).toList();
+
+    popularMovies.assignAll(newPopularMovies);
+    topRatedMovies.assignAll(newTopRatedMovies);
   }
 }

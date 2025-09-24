@@ -22,7 +22,7 @@ class MovieModel {
       'title': title,
       'release_date': releaseDate,
       'poster_path': posterPath,
-      'genres_ids': genres,
+      'genre_ids': genres,
       'favorite': favorite,
     };
   }
@@ -33,7 +33,7 @@ class MovieModel {
       title: map['title'] ?? '',
       releaseDate: map['release_date'] ?? '',
       posterPath: 'https://image.tmdb.org/t/p/w500/${map['poster_path']}',
-      genres: List<int>.from(map['genres_ids'] ?? const []),
+      genres: List<int>.from(map['genre_ids'] ?? const []),
       favorite: map['favorite'] ?? false,
     );
   }
