@@ -14,7 +14,13 @@ class MoviesFilters extends GetView<MoviesController> {
         scrollDirection: Axis.horizontal,
         child: Obx(() {
           return Row(
-            children: controller.genres.map((g) => FilterTag()).toList(),
+            children: controller.genres
+                .map((g) => FilterTag(
+                      model: g,
+                      onPressed: () {},
+                      selected: false,
+                    ))
+                .toList(),
           );
         }),
       ),
