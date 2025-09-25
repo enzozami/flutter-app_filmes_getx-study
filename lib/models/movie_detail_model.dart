@@ -7,10 +7,10 @@ class MovieDetailModel {
   final String title;
   final double stars;
   final List<GenreModel> genres;
-  final String urlImage;
+  final List<String> urlImage;
   final DateTime releaseDate;
   final String overview;
-  final List<String> productionCompanies;
+  final List<dynamic> productionCompanies;
   final String originalLanguage;
   final List<CastModel> cast;
   MovieDetailModel({
@@ -28,28 +28,37 @@ class MovieDetailModel {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'stars': stars,
+      'vote_average': stars,
       'genres': genres.map((x) => x.toMap()).toList(),
       'urlImage': urlImage,
-      'releaseDate': releaseDate.millisecondsSinceEpoch,
+      'release_date': releaseDate.millisecondsSinceEpoch,
       'overview': overview,
-      'productionCompanies': productionCompanies,
-      'originalLanguage': originalLanguage,
+      'production_companies': productionCompanies,
+      'original_language': originalLanguage,
       'cast': cast.map((x) => x.toMap()).toList(),
     };
   }
 
   factory MovieDetailModel.fromMap(Map<String, dynamic> map) {
+    var urlImagesPosters = map['images']['posters'];
+    var urlImage = urlImagesPosters
+            ?.map<String>((i) => 'https://image.tmdb.org/t/p/w500${i['file_path']}')
+            .toList() ??
+        [];
+
     return MovieDetailModel(
       title: map['title'] ?? '',
-      stars: map['stars']?.toDouble() ?? 0.0,
+      stars: map['vote_average']?.toDouble() ?? 0.0,
       genres: List<GenreModel>.from(map['genres']?.map((x) => GenreModel.fromMap(x)) ?? const []),
-      urlImage: map['urlImage'] ?? '',
-      releaseDate: DateTime.fromMillisecondsSinceEpoch(map['releaseDate']),
+      urlImage: urlImage,
+      releaseDate: DateTime.parse(map['release_date']),
       overview: map['overview'] ?? '',
-      productionCompanies: List<String>.from(map['productionCompanies'] ?? const []),
-      originalLanguage: map['originalLanguage'] ?? '',
-      cast: List<CastModel>.from(map['cast']?.map((x) => CastModel.fromMap(x)) ?? const []),
+      productionCompanies: List<dynamic>.from(map['production_companies'] ?? const [])
+          .map((p) => p['name'])
+          .toList(),
+      originalLanguage: map['original_language'] ?? '',
+      cast: List<CastModel>.from(
+          map['credits']['cast']?.map((x) => CastModel.fromMap(x)) ?? const []),
     );
   }
 
