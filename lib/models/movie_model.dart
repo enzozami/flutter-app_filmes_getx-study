@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
+
 class MovieModel {
   final int id;
   final String title;
@@ -32,7 +34,7 @@ class MovieModel {
       id: map['id']?.toInt() ?? 0,
       title: map['title'] ?? '',
       releaseDate: map['release_date'] ?? '',
-      posterPath: 'https://image.tmdb.org/t/p/w500${map['poster_path']}',
+      posterPath: map['poster_path'],
       genres: List<int>.from(map['genre_ids'] ?? const []),
       favorite: map['favorite'] ?? false,
     );
@@ -41,4 +43,22 @@ class MovieModel {
   String toJson() => json.encode(toMap());
 
   factory MovieModel.fromJson(String source) => MovieModel.fromMap(json.decode(source));
+
+  MovieModel copyWith({
+    int? id,
+    String? title,
+    String? releaseDate,
+    ValueGetter<String?>? posterPath,
+    List<int>? genres,
+    bool? favorite,
+  }) {
+    return MovieModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      releaseDate: releaseDate ?? this.releaseDate,
+      posterPath: posterPath != null ? posterPath() : this.posterPath,
+      genres: genres ?? this.genres,
+      favorite: favorite ?? this.favorite,
+    );
+  }
 }

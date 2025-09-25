@@ -1,3 +1,4 @@
+import 'package:app_filmes/application/ui/widgets/movie_card.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import './favorites_controller.dart';
@@ -14,7 +15,24 @@ class FavoritesPage extends GetView<FavoritesController> {
           child: Text('Favoritos'),
         ),
       ),
-      body: Text('Estou na FavoritesPage'),
+      body: Obx(() {
+        return SingleChildScrollView(
+          child: SizedBox(
+            width: Get.width,
+            child: Wrap(
+              alignment: WrapAlignment.spaceAround,
+              children: controller.movies
+                  .map(
+                    (m) => MovieCard(
+                      movie: m,
+                      favoriteCallback: () => controller.removeFavorite,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
