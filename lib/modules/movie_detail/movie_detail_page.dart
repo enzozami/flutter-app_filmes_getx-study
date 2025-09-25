@@ -11,7 +11,9 @@ class MovieDetailPage extends GetView<MovieDetailController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MovieDetailPage'),
+        title: Obx(() {
+          return Text(controller.movie.value?.title ?? '');
+        }),
       ),
       body: SingleChildScrollView(
         child: Obx(() {

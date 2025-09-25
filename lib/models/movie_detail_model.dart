@@ -40,11 +40,16 @@ class MovieDetailModel {
   }
 
   factory MovieDetailModel.fromMap(Map<String, dynamic> map) {
-    var urlImagesPosters = map['images']['posters'];
+    var urlImagesPosters = map['images']['posters'] as List<dynamic>? ?? [];
     var urlImage = urlImagesPosters
-            ?.map<String>((i) => 'https://image.tmdb.org/t/p/w500${i['file_path']}')
-            .toList() ??
-        [];
+        .map<String?>((i) =>
+            i['file_path'] != null ? 'https://image.tmdb.org/t/p/w500${i['file_path']}' : null)
+        .whereType<String>()
+        .toList();
+
+    if (urlImage.isEmpty) {
+      urlImage = ['https://via.placeholder.com/300x450?text=No+Image'];
+    }
 
     return MovieDetailModel(
       title: map['title'] ?? '',

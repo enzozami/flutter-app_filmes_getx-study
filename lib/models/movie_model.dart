@@ -4,7 +4,7 @@ class MovieModel {
   final int id;
   final String title;
   final String releaseDate;
-  final String posterPath;
+  final String? posterPath;
   final List<int> genres;
   final bool favorite;
   MovieModel({
@@ -32,7 +32,7 @@ class MovieModel {
       id: map['id']?.toInt() ?? 0,
       title: map['title'] ?? '',
       releaseDate: map['release_date'] ?? '',
-      posterPath: 'https://image.tmdb.org/t/p/w500/${map['poster_path']}',
+      posterPath: 'https://image.tmdb.org/t/p/w500${map['poster_path']}',
       genres: List<int>.from(map['genre_ids'] ?? const []),
       favorite: map['favorite'] ?? false,
     );

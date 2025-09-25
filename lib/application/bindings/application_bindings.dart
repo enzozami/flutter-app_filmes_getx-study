@@ -13,7 +13,7 @@ import 'package:get/get.dart';
 class ApplicationBindings implements Bindings {
   @override
   void dependencies() {
-    Get.put(RestClient(), permanent: true);
+    Get.lazyPut(() => RestClient(), fenix: true);
     Get.lazyPut<LoginRepository>(() => LoginRepositoryImpl(), fenix: true);
     Get.lazyPut<LoginService>(() => LoginServiceImpl(loginRepository: Get.find()), fenix: true);
     Get.put<AuthService>(AuthService()).init();
