@@ -5,4 +5,5 @@ abstract interface class MoviesRepository {
   Future<List<MovieModel>> getPopularMovies();
   Future<List<MovieModel>> getTopRated();
   Future<MovieDetailModel?> getDetail(int id);
+  Future<void> addOrRemoveFavorit(String userId, MovieModel movie);
 }

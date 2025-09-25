@@ -4,6 +4,7 @@ import 'package:app_filmes/application/rest_client/rest_client.dart';
 import 'package:app_filmes/models/movie_detail_model.dart';
 import 'package:app_filmes/models/movie_model.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import './movies_repository.dart';
 
@@ -85,5 +86,10 @@ class MoviesRepositoryImpl implements MoviesRepository {
     }
 
     return result.body;
+  }
+
+  @override
+  Future<void> addOrRemoveFavorit(String userId, MovieModel movie) {
+    var favoriteCollection = FirebaseStorage.instance;
   }
 }
