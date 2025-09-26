@@ -8,7 +8,7 @@ class MoviesServiceImpl implements MoviesService {
   final MoviesRepository _moviesRepository;
 
   MoviesServiceImpl({
-    required moviesRepository,
+    required MoviesRepository moviesRepository,
   }) : _moviesRepository = moviesRepository;
 
   @override
@@ -25,6 +25,6 @@ class MoviesServiceImpl implements MoviesService {
       _moviesRepository.addOrRemoveFavorite(userId, movie);
 
   @override
-  Future<List<MovieModel>> getFavoritiesMovies(String userId) =>
+  Stream<List<MovieModel>> getFavoritiesMovies(String userId) =>
       _moviesRepository.getFavoritiesMovies(userId);
 }

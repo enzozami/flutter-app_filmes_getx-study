@@ -95,10 +95,10 @@ class MoviesRepositoryImpl implements MoviesRepository {
           FirebaseFirestore.instance.collection('favorities').doc(userId).collection('movies');
 
       if (movie.favorite) {
-        favoriteCollection.add(movie.toMap());
+        await favoriteCollection.add(movie.toMap());
       } else {
         var favoriteData = await favoriteCollection.where('id', isEqualTo: movie.id).limit(1).get();
-        favoriteData.docs.first.reference.delete();
+        await favoriteData.docs.first.reference.delete();
       }
     } catch (e) {
       log('Erro ao favoritar um filme');
@@ -107,17 +107,12 @@ class MoviesRepositoryImpl implements MoviesRepository {
   }
 
   @override
-  Future<List<MovieModel>> getFavoritiesMovies(String userId) async {
-    var favoritiesMovies = await FirebaseFirestore.instance
+  Stream<List<MovieModel>> getFavoritiesMovies(String userId) {
+    return FirebaseFirestore.instance
         .collection('favorities')
         .doc(userId)
         .collection('movies')
-        .get();
-
-    final listFavorities = <MovieModel>[];
-    for (var movie in favoritiesMovies.docs) {
-      listFavorities.add(MovieModel.fromMap(movie.data()));
-    }
-    return listFavorities;
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => MovieModel.fromMap(doc.data())).toList());
   }
 }

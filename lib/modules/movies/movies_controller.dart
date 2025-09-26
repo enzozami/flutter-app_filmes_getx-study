@@ -19,8 +19,8 @@ class MoviesController extends GetxController with MessagesMixin {
   final popularMovies = <MovieModel>[].obs;
   final topRatedMovies = <MovieModel>[].obs;
 
-  final _popularMoviesOriginal = <MovieModel>[];
-  final _topRatedMoviesOriginal = <MovieModel>[];
+  var _popularMoviesOriginal = <MovieModel>[];
+  var _topRatedMoviesOriginal = <MovieModel>[];
 
   final genreSelected = Rxn<GenreModel>();
 
@@ -45,7 +45,48 @@ class MoviesController extends GetxController with MessagesMixin {
       final genresData = await _genresService.getGenres();
       genres.assignAll(genresData);
 
-      await getMovies();
+      getMovies();
+    } catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+      _message(MessageModel.error(title: 'Erro', message: 'Erro ao carregar dados da página'));
+    }
+  }
+
+  void getMovies() async {
+    try {
+      var popularMoviesData = await _moviesService.getPopularMovies();
+      var topRatedMoviesData = await _moviesService.getTopRated();
+
+      final user = _authService.user;
+      if (user != null) {
+        // Escutando a stream de favoritos
+        _moviesService.getFavoritiesMovies(user.uid).listen((favoritesList) {
+          // Convertendo para Map para facilitar a checagem
+          final favoritesMap = {for (var fav in favoritesList) fav.id: fav};
+
+          // Atualizando popularMovies
+          final updatedPopular = popularMoviesData.map((m) {
+            return m.copyWith(favorite: favoritesMap.containsKey(m.id));
+          }).toList();
+          popularMovies.assignAll(updatedPopular);
+          _popularMoviesOriginal = updatedPopular;
+
+          // Atualizando topRatedMovies
+          final updatedTopRated = topRatedMoviesData.map((m) {
+            return m.copyWith(favorite: favoritesMap.containsKey(m.id));
+          }).toList();
+          topRatedMovies.assignAll(updatedTopRated);
+          _topRatedMoviesOriginal = updatedTopRated;
+        });
+      } else {
+        // Se não tiver usuário, só carrega os filmes sem favoritos
+        popularMovies.assignAll(popularMoviesData);
+        _popularMoviesOriginal = popularMoviesData;
+
+        topRatedMovies.assignAll(topRatedMoviesData);
+        _topRatedMoviesOriginal = topRatedMoviesData;
+      }
     } catch (e, s) {
       log(e.toString());
       log(s.toString());
@@ -104,57 +145,22 @@ class MoviesController extends GetxController with MessagesMixin {
     topRatedMovies.assignAll(newTopRatedMovies);
   }
 
-  Future<void> getMovies() async {
-    try {
-      final popularMoviesData = await _moviesService.getPopularMovies();
-      final topRatedMoviesData = await _moviesService.getTopRated();
-      final favorites = await getFavorites();
-
-      final popularMoviesList = popularMoviesData
-          .map((e) => favorites.containsKey(e.id)
-              ? e.copyWith(favorite: true)
-              : e.copyWith(favorite: false))
-          .toList();
-
-      final topRatedMoviesList = topRatedMoviesData
-          .map((e) => favorites.containsKey(e.id)
-              ? e.copyWith(favorite: true)
-              : e.copyWith(favorite: false))
-          .toList();
-
-      popularMovies.assignAll(popularMoviesList);
-      _popularMoviesOriginal
-        ..clear()
-        ..addAll(popularMoviesList);
-
-      topRatedMovies.assignAll(topRatedMoviesList);
-      _topRatedMoviesOriginal
-        ..clear()
-        ..addAll(topRatedMoviesList);
-    } catch (e, s) {
-      log(e.toString());
-      log(s.toString());
-      _message(MessageModel.error(title: 'Erro', message: 'Erro ao carregar dados da página'));
-    }
-  }
-
   Future<void> favoriteMovie(MovieModel movie) async {
     final user = _authService.user;
     if (user != null) {
       var newMovie = movie.copyWith(favorite: !movie.favorite);
       await _moviesService.addOrRemoveFavorite(user.uid, newMovie);
-      await getMovies();
+      getMovies();
     }
   }
 
-  Future<Map<int, MovieModel>> getFavorites() async {
+  Future<Stream<Map<int, MovieModel>>> getFavorites() async {
     final user = _authService.user;
     if (user != null) {
-      final favorites = await _moviesService.getFavoritiesMovies(user.uid);
-      return <int, MovieModel>{
-        for (var fav in favorites) fav.id: fav,
-      };
+      return _moviesService.getFavoritiesMovies(user.uid).map((favorites) => <int, MovieModel>{
+            for (var fav in favorites) fav.id: fav,
+          });
     }
-    return {};
+    return Stream.value({});
   }
 }
